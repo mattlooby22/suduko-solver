@@ -11,11 +11,21 @@ An interactive Sudoku puzzle solver built with React that allows you to solve pu
 - Two solving modes:
   - **Solve**: Instantly completes the puzzle
   - **Solve Slowly**: Visually demonstrates the backtracking algorithm step-by-step
+- Stop button to interrupt the solving animation at any point
 - Visual feedback during slow solving:
   - Green flashing for successful number placements
   - Red flashing when backtracking
 - Clear button to reset the board
 - Input validation ensures only valid numbers are entered
+- **User-entered cell preservation**:
+  - User-entered values are visually distinguished with bold, black text
+  - Solver preserves user-entered values, never modifying them during backtracking
+  - Ensures the original puzzle integrity is maintained
+- **Configuration management**:
+  - Save up to 5 board configurations with timestamps
+  - Load saved configurations with confirmation dialog
+  - Delete saved configurations when no longer needed
+  - Configurations persisted in local storage
 
 ## Installation
 
@@ -53,21 +63,34 @@ This will start the development server. Open [http://localhost:3000](http://loca
    - Click "Solve" to instantly fill in the solution
    - Click "Solve Slowly" to watch the algorithm solve step-by-step
    - The slow solver shows green flashes for placed numbers and red flashes for backtracking
+   - Click "Stop Solving" to interrupt the slow solving process at any point
+   - User-entered values (original puzzle numbers) are preserved during solving
 
-3. **Reset the Board**:
-   - Click "Clear" to reset the entire board
+3. **Managing Board Configurations**:
+   - Click "Save Configuration" to save the current board state
+   - View saved configurations in the sidebar
+   - Click "Load" to restore a saved configuration (with confirmation)
+   - Click "Delete" to remove a saved configuration
+
+4. **Reset the Board**:
+   - Click "Clear" to reset the entire board and remove all values
 
 ## How It Works
 
 The Sudoku solver uses a backtracking algorithm to find solutions:
 
 1. Start with an empty or partially filled grid
-2. Find an empty cell
+2. Find an empty cell (skipping any user-entered cells)
 3. Try placing digits 1-9, checking validity for each number
 4. If a digit is valid, recursively attempt to fill the grid using steps 2-4
 5. If no digit works, backtrack to the previous cell and try a different digit
 
-The "Solve Slowly" option visualizes this process, showing each step of the algorithm including backtracking steps when a particular path doesn't lead to a solution.
+The "Solve Slowly" option visualizes this process, showing each step of the algorithm including backtracking steps when a particular path doesn't lead to a solution. During solving:
+
+- User-entered cells are treated as fixed constraints and never modified
+- Green flashing indicates a successful number placement
+- Red flashing indicates backtracking when a dead-end is reached
+- The algorithm automatically respects the rules of Sudoku (no repeats in rows, columns, or 3x3 boxes)
 
 ## Technologies Used
 
