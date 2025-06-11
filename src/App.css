@@ -1,38 +1,106 @@
 .App {
   text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 40px);
+  grid-template-rows: repeat(9, 40px);
+  gap: 2px;
+  margin: 20px auto;
+  width: max-content;
+  border: 2px solid black;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.cell {
+  width: 38px;
+  height: 38px;
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Make every 3rd column have a thicker right border */
+.cell:nth-child(3n) {
+  border-right: 2px solid black;
 }
 
-.App-link {
-  color: #61dafb;
+/* Make the right edge of first column 3x3 grids thicker */
+.cell:nth-child(3),
+.cell:nth-child(12),
+.cell:nth-child(21),
+.cell:nth-child(30),
+.cell:nth-child(39),
+.cell:nth-child(48),
+.cell:nth-child(57),
+.cell:nth-child(66),
+.cell:nth-child(75) {
+  border-right: 3px solid black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Make every 3rd row have a thicker bottom border */
+.cell:nth-child(n+19):nth-child(-n+27),
+.cell:nth-child(n+46):nth-child(-n+54),
+.cell:nth-child(n+73):nth-child(-n+81) {
+  border-bottom: 2px solid black;
+}
+
+/* Make the outside right edge bolder */
+.cell:nth-child(9n) {
+  border-right: 2px solid black;
+}
+
+/* Add visual distinction for alternating 3x3 grids in a checkerboard pattern */
+/* Row 1: Shade 1st and 3rd 3x3 grids */
+/* First 3x3 grid */
+.cell:nth-child(n+1):nth-child(-n+3),
+.cell:nth-child(n+10):nth-child(-n+12),
+.cell:nth-child(n+19):nth-child(-n+21),
+/* Third 3x3 grid */
+.cell:nth-child(n+7):nth-child(-n+9),
+.cell:nth-child(n+16):nth-child(-n+18),
+.cell:nth-child(n+25):nth-child(-n+27),
+
+/* Row 2: Shade the middle 3x3 grid */
+.cell:nth-child(n+31):nth-child(-n+33),
+.cell:nth-child(n+40):nth-child(-n+42),
+.cell:nth-child(n+49):nth-child(-n+51),
+
+/* Row 3: Shade 1st and 3rd 3x3 grids */
+/* First 3x3 grid */
+.cell:nth-child(n+55):nth-child(-n+57),
+.cell:nth-child(n+64):nth-child(-n+66),
+.cell:nth-child(n+73):nth-child(-n+75),
+/* Third 3x3 grid */
+.cell:nth-child(n+61):nth-child(-n+63),
+.cell:nth-child(n+70):nth-child(-n+72),
+.cell:nth-child(n+79):nth-child(-n+81) {
+  background-color: #f5f5f5;
+}
+
+.cell.selected {
+  outline: 2px solid #4a90e2;
+  z-index: 1;
+}
+
+.cell.flash-green {
+  background-color: #4CAF50 !important;
+  transition: background-color 0.3s;
+}
+
+.cell.flash-red {
+  background-color: #f44336 !important;
+  transition: background-color 0.3s;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
 }
