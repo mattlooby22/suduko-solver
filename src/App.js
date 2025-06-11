@@ -111,10 +111,18 @@ function App() {
   const [isSolving, setIsSolving] = useState(false);
   const [solveMethod, setSolveMethod] = useState(null); // 'slow' or 'fast' or null
   const solveTimeoutRef = useRef(null); // To track timeouts for cancellation
+  const [solveTime, setSolveTime] = useState({ startTime: null, endTime: null }); // Track solving duration
+  const [elapsedTime, setElapsedTime] = useState(null); // Display time during solving
+  const timerIntervalRef = useRef(null); // For tracking the timer interval
   
   // Function to stop the solving process
   // State to track if solving was manually stopped
   const [solvingStopped, setSolvingStopped] = useState(false);
+  
+  // Format milliseconds to "0.00s" format
+  const formatTime = (ms) => {
+    return `${(ms / 1000).toFixed(2)}s`;
+  };
   
   const handleStop = () => {
     // Clear any pending timeouts
@@ -123,10 +131,17 @@ function App() {
       solveTimeoutRef.current = null;
     }
     
+    // Stop the timer
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    
     // Reset the solving state and set stopped flag
     setIsSolving(false);
     setSolveMethod(null);
     setSolvingStopped(true);
+    setElapsedTime(null);
     
     // Clear the stopped flag after 3 seconds
     setTimeout(() => {
@@ -146,6 +161,12 @@ function App() {
     
     setIsSolving(true);
     setSolveMethod('fast');
+    
+    // Start the timer
+    const startTime = Date.now();
+    setSolveTime({ startTime, endTime: null });
+    setElapsedTime('0.00s');
+    
     const newBoard = board.map(r => [...r]);
     
     // Simple solver without animation
@@ -171,11 +192,20 @@ function App() {
     };
 
     if (simpleSolve(newBoard)) {
+      const endTime = Date.now();
       setBoard(newBoard);
       setIsSolving(false);
+      setSolveTime(prev => ({ ...prev, endTime }));
+      setElapsedTime(formatTime(endTime - startTime));
+      
+      // Flash the solve time for 3 seconds
+      setTimeout(() => {
+        setElapsedTime(null);
+      }, 3000);
     } else {
       alert('No solution found!');
       setIsSolving(false);
+      setElapsedTime(null);
     }
   };
   
@@ -186,6 +216,18 @@ function App() {
     
     setIsSolving(true);
     setSolveMethod('slow');
+    
+    // Start the timer
+    const startTime = Date.now();
+    setSolveTime({ startTime, endTime: null });
+    setElapsedTime('0.00s');
+    
+    // Set up interval to update elapsed time every 100ms
+    timerIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      setElapsedTime(formatTime(elapsed));
+    }, 100);
+    
     const newBoard = board.map(r => [...r]);
     const solutionSteps = [];
     
@@ -233,6 +275,20 @@ function App() {
           setFlashingCells({});
           setIsSolving(false);
           setSolveMethod(null);
+          
+          // Stop the timer and record end time
+          const endTime = Date.now();
+          setSolveTime(prev => ({ ...prev, endTime }));
+          if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+          }
+          
+          // Keep showing the final time for 3 seconds
+          setTimeout(() => {
+            setElapsedTime(null);
+          }, 3000);
+          
           return;
         }
         
@@ -272,11 +328,18 @@ function App() {
     setConfigToLoad(null);
     setFlashingCells({});  // Clear any flashing cells (red/green)
     setUserEnteredCells({}); // Reset user-entered cells tracking
+    setElapsedTime(null); // Clear timer display
     
     // If there's an ongoing solving animation, stop it
     if (solveTimeoutRef.current) {
       clearTimeout(solveTimeoutRef.current);
       solveTimeoutRef.current = null;
+    }
+    
+    // If timer is running, stop it
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
     }
     
     // Reset solving states
@@ -384,6 +447,14 @@ function App() {
             <button onClick={handleSaveConfig} disabled={isSolving || savedConfigs.length >= 5}>
               Save Configuration
             </button>
+            
+            {/* Timer Display */}
+            {elapsedTime && (
+              <div className="timer-display">
+                {isSolving ? "Solving time: " : "Solved in: "}{elapsedTime}
+              </div>
+            )}
+            
             {solvingStopped && (
               <div className="status-message">Solving process stopped successfully</div>
             )}
