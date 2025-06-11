@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# Sudoku Solver
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An interactive Sudoku puzzle solver built with React that allows you to solve puzzles manually or watch the backtracking algorithm solve them automatically.
 
-## Available Scripts
+![Sudoku Solver Screenshot](https://via.placeholder.com/800x450.png?text=Sudoku+Solver+Screenshot)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Interactive 9x9 Sudoku grid with checkerboard-style 3x3 sections
+- Keyboard navigation using arrow keys
+- Two solving modes:
+  - **Solve**: Instantly completes the puzzle
+  - **Solve Slowly**: Visually demonstrates the backtracking algorithm step-by-step
+- Visual feedback during slow solving:
+  - Green flashing for successful number placements
+  - Red flashing when backtracking
+- Clear button to reset the board
+- Input validation ensures only valid numbers are entered
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Installation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To install and set up the project locally:
 
-### `npm test`
+```bash
+# Clone the repository
+git clone https://github.com/mattlooby22/sudoku-solver.git
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Navigate to the project directory
+cd sudoku-solver
 
-### `npm run build`
+# Install dependencies
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Running the Application
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To run the application in development mode:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+This will start the development server. Open [http://localhost:3000](http://localhost:3000) in your browser to use the application.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## How to Use
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Manual Solving**:
+   - Click on a cell and type a number from 1-9
+   - Navigate between cells using arrow keys
+   - The selected cell is highlighted with a blue outline
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. **Automatic Solving**:
+   - Click "Solve" to instantly fill in the solution
+   - Click "Solve Slowly" to watch the algorithm solve step-by-step
+   - The slow solver shows green flashes for placed numbers and red flashes for backtracking
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Reset the Board**:
+   - Click "Clear" to reset the entire board
 
-## Learn More
+## How It Works
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The Sudoku solver uses a backtracking algorithm to find solutions:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Start with an empty or partially filled grid
+2. Find an empty cell
+3. Try placing digits 1-9, checking validity for each number
+4. If a digit is valid, recursively attempt to fill the grid using steps 2-4
+5. If no digit works, backtrack to the previous cell and try a different digit
 
-### Code Splitting
+The "Solve Slowly" option visualizes this process, showing each step of the algorithm including backtracking steps when a particular path doesn't lead to a solution.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Technologies Used
 
-### Analyzing the Bundle Size
+- React
+- JavaScript
+- CSS Grid for layout
+- React Hooks (useState, useEffect, useRef)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Building for Production
 
-### Making a Progressive Web App
+To build the app for production:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm run build
+```
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This creates an optimized production build in the `build` folder that can be deployed to a web server.
