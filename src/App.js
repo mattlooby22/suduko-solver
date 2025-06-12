@@ -311,7 +311,7 @@ function App() {
         solveTimeoutRef.current = setTimeout(() => {
           setFlashingCells({});
           animateSteps(steps, index + 1);
-        }, 125); // Combined flash duration and delay between steps
+        }, 75); // Combined flash duration and delay between steps
       };
       
       // Start the animation with all steps (including backtracking)
