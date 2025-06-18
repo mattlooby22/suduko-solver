@@ -408,59 +408,58 @@ function App() {
   return (
     <div className="App">
       <h1>Sudoku Solver</h1>
-      <div className="game-container">
-        <div className="board-section">
-          <div className="board">
-            {board.map((row, rIdx) =>
-              row.map((cell, cIdx) => (
-                <input
-                  key={`${rIdx}-${cIdx}`}
-                  ref={inputRefs.current[rIdx][cIdx]}
-                  type="text"
-                  maxLength="1"
-                  value={cell}
-                  onChange={(e) => handleChange(rIdx, cIdx, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, rIdx, cIdx)}
-                  onClick={() => handleCellClick(rIdx, cIdx)}
-                  className={`cell 
-                    ${selectedCell.row === rIdx && selectedCell.col === cIdx ? 'selected' : ''}
-                    ${flashingCells[`${rIdx}-${cIdx}`] || ''}
-                    ${userEnteredCells[`${rIdx}-${cIdx}`] ? 'user-entered' : ''}
-                  `}
-                />
-              ))
-            )}
-          </div>
-          <div className="buttons">
-            <button onClick={handleSolve} disabled={isSolving}>
-              {isSolving && solveMethod === 'fast' ? 'Solving...' : 'Solve'}
-            </button>
-            <button onClick={handleSolveSlowly} disabled={isSolving}>
-              {isSolving && solveMethod === 'slow' ? 'Solving...' : 'Solve Slowly'}
-            </button>
-            {isSolving && solveMethod === 'slow' && (
-              <button className="stop-button" onClick={handleStop}>
-                Stop Solving
+      <div className="main-grid-container">
+        <div className="game-container">
+          <div className="board-section">
+            <div className="board">
+              {board.map((row, rIdx) =>
+                row.map((cell, cIdx) => (
+                  <input
+                    key={`${rIdx}-${cIdx}`}
+                    ref={inputRefs.current[rIdx][cIdx]}
+                    type="text"
+                    maxLength="1"
+                    value={cell}
+                    onChange={(e) => handleChange(rIdx, cIdx, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e, rIdx, cIdx)}
+                    onClick={() => handleCellClick(rIdx, cIdx)}
+                    className={`cell 
+                      ${selectedCell.row === rIdx && selectedCell.col === cIdx ? 'selected' : ''}
+                      ${flashingCells[`${rIdx}-${cIdx}`] || ''}
+                      ${userEnteredCells[`${rIdx}-${cIdx}`] ? 'user-entered' : ''}
+                    `}
+                  />
+                ))
+              )}
+            </div>
+            <div className="buttons">
+              <button onClick={handleSolve} disabled={isSolving}>
+                {isSolving && solveMethod === 'fast' ? 'Solving...' : 'Solve'}
               </button>
-            )}
-            <button onClick={handleClear} disabled={isSolving}>Clear</button>
-            <button onClick={handleSaveConfig} disabled={isSolving || savedConfigs.length >= 5}>
-              Save Configuration
-            </button>
-            
-            {/* Timer Display */}
-            {elapsedTime && (
-              <div className="timer-display">
-                {isSolving ? "Solving time: " : "Solved in: "}{elapsedTime}
-              </div>
-            )}
-            
-            {solvingStopped && (
-              <div className="status-message">Solving process stopped successfully</div>
-            )}
+              <button onClick={handleSolveSlowly} disabled={isSolving}>
+                {isSolving && solveMethod === 'slow' ? 'Solving...' : 'Solve Slowly'}
+              </button>
+              {isSolving && solveMethod === 'slow' && (
+                <button className="stop-button" onClick={handleStop}>
+                  Stop Solving
+                </button>
+              )}
+              <button onClick={handleClear} disabled={isSolving}>Clear</button>
+              <button onClick={handleSaveConfig} disabled={isSolving || savedConfigs.length >= 5}>
+                Save Configuration
+              </button>
+              {/* Timer Display */}
+              {elapsedTime && (
+                <div className="timer-display">
+                  {isSolving ? "Solving time: " : "Solved in: "}{elapsedTime}
+                </div>
+              )}
+              {solvingStopped && (
+                <div className="status-message">Solving process stopped successfully</div>
+              )}
+            </div>
           </div>
         </div>
-        
         <div className="saved-configs">
           <h2>Saved Configurations</h2>
           {savedConfigs.length === 0 ? (
@@ -495,7 +494,6 @@ function App() {
           )}
         </div>
       </div>
-      
       {/* Confirmation Dialog */}
       {showConfirmation && configToLoad && (
         <div className="confirmation-dialog">
